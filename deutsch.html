@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Automatische Kommaeinfügung</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    textarea {
+      width: 400px;
+      height: 200px;
+      resize: none;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h2>Automatische Kommaeinfügung</h2>
+  <textarea id="inputTextArea" placeholder="Geben Sie den Satz auf Deutsch ein"></textarea>
+  <br>
+  <button onclick="addCommas()">Kommas hinzufügen</button>
+
+  <script>
+    function addCommas() {
+      var inputSentence = document.getElementById("inputTextArea").value;
+      var outputSentence = processSentence(inputSentence);
+      document.getElementById("outputTextArea").value = outputSentence;
+    }
+
+    function processSentence(sentence) {
+      var commaRegex = /(\b[a-zA-ZäöüÄÖÜß]+\b)(\s+(aber|und|oder|denn|sondern|nichtsdestotrotz|allerdings|daher|also|jedoch|doch|dennoch|deshalb|weshalb|weil|wenn|dass|obwohl|obgleich|wohingegen|dagegen|nämlich|zum Beispiel|beispielsweise|zumal|insbesondere|genauer gesagt|andererseits|im Gegensatz dazu))|((\b[a-zA-ZäöüÄÖÜß]+\b)[\s,.:;!?]+(\s+[A-ZÄÖÜ]))/g;
+      var result = sentence.replace(commaRegex, function (match, word, conjunction, word2, punctuation, space, capitalLetter) {
+        if (conjunction) {
+          return word + ', ' + conjunction;
+        } else {
+          return word2 + punctuation + space + capitalLetter;
+        }
+      });
+      return result;
+    }
+  </script>
+  
+  <h3>Ergebnis:</h3>
+  <textarea id="outputTextArea" readonly></textarea>
+</body>
+</html>
+
+
+
+
