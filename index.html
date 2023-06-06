@@ -25,6 +25,10 @@
     button:hover {
       background-color: #45a049;
     }
+
+    .error {
+      border-bottom: 1px solid rgb(255, 255, 0);
+    }
   </style>
 </head>
 <body>
@@ -37,22 +41,32 @@
     function addCommas() {
       var inputSentence = document.getElementById("inputTextArea").value;
       var outputSentence = processSentence(inputSentence);
-      document.getElementById("outputTextArea").value = outputSentence;
+      document.getElementById("outputTextArea").innerHTML = outputSentence;
     }
 
     function processSentence(sentence) {
-      var commaRegex = /(\b[a-zA-ZäöüÄÖÜß]+\b)(\s+(aber|und|oder|denn|sondern|nichtsdestotrotz|allerdings|daher|also|jedoch|doch|dennoch|deshalb|weshalb|weil|wenn|dass|obwohl|obgleich|wohingegen|dagegen|nämlich|zum Beispiel|beispielsweise|zumal|insbesondere|genauer gesagt|andererseits|im Gegensatz dazu))|((\b[a-zA-ZäöüÄÖÜß]+\b)[\s,.:;!?]+(\s+[A-ZÄÖÜ]))/g;
-      var result = sentence.replace(commaRegex, function (match, word, conjunction, word2, punctuation, space, capitalLetter) {
+      var commaRegex = /(\b[a-zA-ZäöüÄÖÜß]+\b)(\s+(aber|und|oder|denn|sondern|nichtsdestotrotz|allerdings|daher|also|jedoch|doch|dennoch|deshalb|weshalb|weil|wenn|dass|obwohl|obgleich|wohingegen|dagegen|nämlich|zum Beispiel|beispielsweise|zumal|insbesondere|genauer gesagt|andererseits|im Gegensatz dazu|infolgedessen|nicht nur|sondern auch|entweder oder|weder noch|je...desto|mal...mal|so...wie|sowohl...als auch|entweder...oder aber|sei es...oder|sei es...sei es|statt...zu|anstatt...zu|mit...zusammen|ohne...zu))\b/g;
+      var result = sentence.replace(commaRegex, function (match, word, conjunction) {
         if (conjunction) {
           return word + ', ' + conjunction;
-        } else {
-          return word2 + punctuation + space + capitalLetter;
         }
+        return match;
       });
-      return result;
+      
+      var words = sentence.split(/\b/);
+      var outputWords = result.split(/\b/);
+      
+      for (var i = 0; i < words.length; i++) {
+        if (words[i] !== outputWords[i]) {
+          outputWords[i] = '<span class="error">' + outputWords[i] + '</span>';
+        }
+      }
+      
+      return outputWords.join('');
     }
   </script>
-  
+ 
+</html>
   <h3>Ergebnis:</h3>
   <textarea id="outputTextArea" readonly></textarea>
 </body>
